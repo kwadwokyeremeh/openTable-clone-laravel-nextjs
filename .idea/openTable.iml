@@ -129,6 +129,7 @@
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/doctrine/dbal" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/doctrine/cache" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/psr/cache" />
+      <excludeFolder url="file://$MODULE_DIR$/backend/vendor/laravel/telescope" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
