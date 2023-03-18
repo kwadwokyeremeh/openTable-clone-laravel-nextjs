@@ -1,27 +1,28 @@
 <?php
 
-namespace App\Actions\Fortify;
+namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\ValidationException;
-use Laravel\Fortify\Contracts\CreatesNewUsers;
+use Illuminate\Validation\Rules;
 
-class CreateNewUser implements CreatesNewUsers
+class RegisteredUserController extends Controller
 {
-    use PasswordValidationRules;
-
     /**
-     * Validate and create a newly registered user.
+     * Handle an incoming registration request.
      *
-     * @param array<string, string> $input
-     * @throws ValidationException
+     * @throws \Illuminate\Validation\ValidationException
      */
-    public function create(array $input): User
+    public function store(Request $request): Response
     {
-//        dd(request());
+        $input = $request->input();
         Validator::make($input, [
             'firstName' => ['required', 'string', 'max:255'],
             'lastName' => ['required', 'string', 'max:255'],
@@ -37,7 +38,7 @@ class CreateNewUser implements CreatesNewUsers
             'password' => $this->passwordRules(),
         ])->validate();
 
-        return User::create([
+        $user = User::create([
             'first_name' => $input['firstName'],
             'last_name' => $input['lastName'],
             'city' => $input['city'],
@@ -45,5 +46,11 @@ class CreateNewUser implements CreatesNewUsers
             'phone' => $input['phone'],
             'password' => Hash::make($input['password']),
         ]);
+
+        event(new Registered($user));
+
+        Auth::login($user);
+
+        return response()->noContent();
     }
 }

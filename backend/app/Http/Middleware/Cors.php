@@ -15,10 +15,17 @@ class Cors
      */
     public function handle(Request $request, Closure $next)
     {
-        return $next($request)
-            ->header('Access-Control-Allow-Origin', '*')
-            ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
-            ->header('Access-Control-Allow-Headers', 'Origin, Content-Type, Accept, Authorization, X-Request-With')
-            ->header('Access-Control-Allow-Credentials', true);
+        $response = $next($request);
+        $response->headers->set('Access-Control-Allow-Origin', 'http://localhost:3000');
+        $response->headers->set('Access-Control-Allow-Credentials', 'true');
+        $response->headers->set('Access-Control-Allow-Headers', "Content-Type, X-XSRF-TOKEN, X-Requested-With");
+        $response->headers->set('Accept', 'application/json');
+
+        return $response;
+//        return $next($request)
+//            ->headers->set('Access-Control-Allow-Origin', env('APP_URL'))
+//            ->headers->set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+//            ->headers->set('Access-Control-Allow-Headers', 'Origin, Content-Type, Accept, Authorization, X-Requested-With')
+//            ->headers->set('Access-Control-Allow-Credentials', 'true');
     }
 }

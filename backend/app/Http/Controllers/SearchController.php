@@ -15,7 +15,7 @@ class SearchController extends Controller
      * @param Request $request
      * @return Price[]|bool|\Illuminate\Database\Eloquent\Collection
      */
-    public function parameters(Request $request)
+    public function parameters(Request $request): \Illuminate\Database\Eloquent\Collection|bool|array
     {
         if(mb_strtolower($request->name) == "cuisine"){
             return Cuisine::all();
@@ -32,9 +32,9 @@ class SearchController extends Controller
 
     /**
      * @param Request $request
-     * @return mixed
+     * @return array|\Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function search(Request $request): mixed
+    public function search(Request $request): array|\Illuminate\Http\Resources\Json\AnonymousResourceCollection
     {
         $location = Location::whereName(mb_strtolower($request->city))->first();
         $cuisine = Cuisine::whereName(mb_strtolower($request->cuisine))->first();
